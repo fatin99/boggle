@@ -10,11 +10,11 @@ import static boggle.MyBoggle.used;
 
 public class Search {
 
-    public static void exhaustiveSearchWildCard(int x, int y, StringBuilder word) {
+    //the arrays we'll use for the the offset (search all the surrounding cells)
+    private static int[] xOffset = {-1, 0, 1, -1, 1, -1, 0, 1};
+    private static int[] yOffset = {-1, -1, -1, 0, 0, 1, 1, 1};
 
-        //the arrays we'll use for the the offset (search all the surrounding cells)
-        int[] xoff = {-1, 0, 1, -1, 1, -1, 0, 1};
-        int[] yoff = {-1, -1, -1, 0, 0, 1, 1, 1};
+    public static void exhaustiveSearchWildCard(int x, int y, StringBuilder word) {
         //these will function as our new coordinates
         int newx;
         int newy;
@@ -25,14 +25,14 @@ public class Search {
         used.setChar(x,y,'1');
         //char current = board.getChar(x,y);
         //examine all the surrounding coordinates
-        for (int i = 0; i < (SIZE * 2); i++) {
-            newx = x + xoff[i];
-            newy = y + yoff[i];
+        for (int i = 0; i < SIZE * 2; i++) {
+            newx = x + xOffset[i];
+            newy = y + yOffset[i];
             //three part check:
             //make sure x is in bounds
             //make sure y is in bounds
             //make sure we haven't used this letter before
-            if (((newx >= 0 && newx <= 3) && (newy >= 0 && newy <= 3)) && (used.getChar(newx, newy) == '0')) {
+            if (isInBounds(newx, newy)) {
                 //if it's a valid coordinate, check to see if adding the letter results in a word or prefix
                 next = Character.toLowerCase(board.getChar(newx, newy));
                 if (next != '*') {
@@ -85,28 +85,23 @@ public class Search {
     }
 
     public static void exhaustiveSearch(int x, int y, StringBuilder word) {
-
-
         //get the current character, add it to the word
         used.setChar(x,y,'1');
         //char current = board.getChar(x,y);
         char next;
-        //the arrays we'll use for the the offset (search all the surrounding cells)
-        int[] xoff = {-1, 0, 1,-1,1,-1,0,1};
-        int[] yoff = {-1,-1,-1, 0,0, 1,1,1};
         //these will function as our new coordinates
         int newx;
         int newy;
         int status;
         //examine all the surrounding coordinates
-        for (int i = 0; i < (SIZE * 2); i++) {
-            newx = x + xoff[i];
-            newy = y + yoff[i];
+        for (int i = 0; i < SIZE * 2; i++) {
+            newx = x + xOffset[i];
+            newy = y + yOffset[i];
             //three part check:
             //make sure x is in bounds
             //make sure y is in bounds
             //make sure we haven't used this letter befpre
-            if(((newx >= 0 && newx <=3)&&(newy >= 0 && newy <=3)) && (used.getChar(newx,newy) == '0')){
+            if(isInBounds(newx, newy)){
                 //if it's a valid coordinate, check to see if adding the letter results in a word or prefix
                 next = Character.toLowerCase(board.getChar(newx,newy));
                 word.append(next);
@@ -121,8 +116,8 @@ public class Search {
                     }
                     //1 or 3 means that we have a valid prefix
                     if (!(status % 2 ==0)){
-                        used.setChar(newx, newy,'1');    //mark the character as used before passing it down the stack
-                        exhaustiveSearch(newx, newy, word);
+                        used.setChar(newx,newy,'1');    //mark the character as used before passing it down the stack
+                        exhaustiveSearch(newx,newy,word);
                     }
                 }
                 //to backtrack, remove the character we added and reset the character as used
@@ -130,5 +125,11 @@ public class Search {
                 used.setChar(newx,newy,'0');
             }
         }
+    }
+
+    public static boolean isInBounds(int newX, int newY) {
+        return ((newX >= 0 && newX <= 3) //make sure x is in bounds
+                && (newY >= 0 && newY <= 3)) //make sure y is in bounds
+                && (used.getChar(newX, newY) == '0');
     }
 }

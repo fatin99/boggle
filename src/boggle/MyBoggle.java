@@ -62,8 +62,9 @@ public class MyBoggle {
     }
 
     public static void play(Scanner sc) {
-        StringBuilder input = new StringBuilder(sc.nextLine().toLowerCase());
         TreeSet<String> correctWords = new TreeSet<>();
+        sc.nextLine();
+        StringBuilder input = new StringBuilder(sc.nextLine().toLowerCase());
 
         while (!input.toString().equals("0")) {
             if (gameDict.search(input) >= 2) {

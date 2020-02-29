@@ -12,7 +12,7 @@ public class Board {
 
     private char[][] boardArray;
     private boolean hasWildcard;
-    private static final char[] ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
+    private final char[] ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
             'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
             'u', 'v', 'w', 'x', 'y', 'z', '*'};
 
@@ -42,7 +42,7 @@ public class Board {
     public void clearBoard() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                boardArray[i][j] = '0';
+                boardArray[i][j] = '0'; //boolean false
             }
         }
     }
