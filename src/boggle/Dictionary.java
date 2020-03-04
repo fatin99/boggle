@@ -9,6 +9,11 @@ public class Dictionary {
 
     private TrieNode root;
 
+    private static final int NOT_PREFIX_NOT_WORD = 0;
+    private static final int PREFIX_NOT_WORD = 1;
+    private static final int WORD_NOT_PREFIX = 2;
+    private static final int PREFIX_AND_WORD = 3;
+
     public Dictionary() {
         root = new TrieNode();
     }
@@ -16,7 +21,8 @@ public class Dictionary {
     public Dictionary(String dictionaryUri) {
         root = new TrieNode();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(dictionaryUri));
+            BufferedReader reader = new BufferedReader(
+                    new FileReader(dictionaryUri));
             String word = reader.readLine();
             while (word != null) {
                 add(word);
@@ -50,8 +56,8 @@ public class Dictionary {
 
         for (char t: s.toString().toCharArray()) {
             TrieNode next = current.getCharList().get(t);
-            if (next == null) { //dead end, not a word or prefix
-                return 0;
+            if (next == null) { //dead end
+                return NOT_PREFIX_NOT_WORD;
             } else {
                 current = next;
             }
@@ -64,9 +70,7 @@ public class Dictionary {
             prefix = true;
         }
 
-        //1 => prefix not word
-        //2 => word not prefix
-        //3 => both
-        return (word ? (prefix ? 3 : 2) : 1);
+        return (word ? (prefix ? PREFIX_AND_WORD : WORD_NOT_PREFIX)
+                : PREFIX_NOT_WORD);
     }
 }

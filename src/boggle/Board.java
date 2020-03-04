@@ -12,7 +12,7 @@ public class Board {
 
     private char[][] boardArray;
     private boolean hasWildcard;
-    private final char[] ALPHABET = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
+    private static final char[] ALLOWED_CHARS = {'a', 'b', 'c', 'd', 'e', 'f', 'g',
             'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
             'u', 'v', 'w', 'x', 'y', 'z', '*'};
 
@@ -26,7 +26,7 @@ public class Board {
             Random rnd = new Random();
             for (int j = 0; j < SIZE; j++) {
                 for (int k = 0; k < SIZE; k++) {
-                    boardArray[j][k] = ALPHABET[rnd.nextInt(27)];
+                    boardArray[j][k] = ALLOWED_CHARS[rnd.nextInt(ALLOWED_CHARS.length)];
                 }
             }
         } else {
@@ -68,14 +68,18 @@ public class Board {
         System.out.println("_________________");
     }
 
-    public void loadBoard(char[] inputBoard) {
+    public ArrayList<Character> cleanBoard(char[] inputBoard) {
         ArrayList<Character> cleanBoard = new ArrayList<>();
         for (char c : inputBoard) {
             if (c != ',' && c != ' ') {
                 cleanBoard.add(c);
             }
         }
+        return cleanBoard;
+    }
 
+    public void loadBoard(char[] inputBoard) {
+        ArrayList<Character> cleanBoard = cleanBoard(inputBoard);
         hasWildcard = false;
         int i = 0;
         System.out.println();
